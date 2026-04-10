@@ -2,57 +2,30 @@
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    // Arrays to store problems solved and penalty time
-    int problems[55];
-    int penalty[55];
+    // Arrays to store home and guest uniform colors
+    int home[35];
+    int guest[35];
 
-    // Read all teams' data
+    // Read data for each team
     for (int i = 0; i < n; i++) {
-        cin >> problems[i] >> penalty[i];
+        cin >> home[i] >> guest[i];
     }
 
-    // Sort teams using bubble sort
-    // Teams with more problems solved come first.
-    // If problems are equal, team with less penalty time comes first.
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            // Check if team j should come before team i
-            bool should_swap = false;
-            
-            if (problems[j] > problems[i]) {
-                // More problems solved -> higher rank
-                should_swap = true;
-            } else if (problems[j] == problems[i] && penalty[j] < penalty[i]) {
-                // Same problems but less penalty -> higher rank
-                should_swap = true;
-            }
-
-            if (should_swap) {
-                // Swap problems
-                int temp_problems = problems[i];
-                problems[i] = problems[j];
-                problems[j] = temp_problems;
-
-                // Swap penalty
-                int temp_penalty = penalty[i];
-                penalty[i] = penalty[j];
-                penalty[j] = temp_penalty;
-            }
-        }
-    }
-
-    // The k-th place team is at index (k - 1) in sorted array
-    int target_problems = problems[k - 1];
-    int target_penalty = penalty[k - 1];
-
-    // Count how many teams have exactly the same score as the k-th team
     int count = 0;
+
+    // Check all pairs where one team hosts and another visits
     for (int i = 0; i < n; i++) {
-        if (problems[i] == target_problems && penalty[i] == target_penalty) {
-            count = count + 1;
+        for (int j = 0; j < n; j++) {
+            // A team cannot play against itself
+            if (i != j) {
+                // If host's home color matches guest's guest color
+                if (home[i] == guest[j]) {
+                    count = count + 1;
+                }
+            }
         }
     }
 
