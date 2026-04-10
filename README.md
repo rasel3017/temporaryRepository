@@ -5,32 +5,44 @@ int main() {
     int n;
     cin >> n;
 
-    // Vector to store names that have been seen before
-    vector<string> seen;
+    // If n is less than 2, there cannot be a second distinct value
+    if (n < 2) {
+        cout << "NO";
+        return 0;
+    }
 
-    // Process each name one by one
+    // Create an array (vector) to store the numbers
+    vector<int> arr(n);
+
+    // Read all numbers
     for (int i = 0; i < n; i++) {
-        string name;
-        cin >> name;
+        cin >> arr[i];
+    }
 
-        // Check if the name already exists in the 'seen' list
-        bool found = false;
-        for (int j = 0; j < seen.size(); j++) {
-            if (seen[j] == name) {
-                found = true;
-                break; // Stop searching once found
+    // Sort the array using simple bubble sort
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (arr[i] > arr[j]) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
             }
         }
+    }
 
-        // Output based on whether the name was found
-        if (found) {
-            cout << "YES" << endl;
-        } else {
-            cout << "NO" << endl;
-            // Add the new name to the list for future checks
-            seen.push_back(name);
+    // Find the smallest value (first element after sorting)
+    int smallest = arr[0];
+
+    // Look for the first value greater than smallest (the second distinct)
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > smallest) {
+            cout << arr[i];
+            return 0;
         }
     }
+
+    // If we reach here, all numbers are the same
+    cout << "NO";
 
     return 0;
 }
