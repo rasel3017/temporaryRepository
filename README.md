@@ -5,31 +5,32 @@ int main() {
     int n;
     cin >> n;
 
-    // Arrays to store home and guest uniform colors
-    int home[35];
-    int guest[35];
+    // Vector to store names that have been seen before
+    vector<string> seen;
 
-    // Read data for each team
+    // Process each name one by one
     for (int i = 0; i < n; i++) {
-        cin >> home[i] >> guest[i];
-    }
+        string name;
+        cin >> name;
 
-    int count = 0;
-
-    // Check all pairs where one team hosts and another visits
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            // A team cannot play against itself
-            if (i != j) {
-                // If host's home color matches guest's guest color
-                if (home[i] == guest[j]) {
-                    count = count + 1;
-                }
+        // Check if the name already exists in the 'seen' list
+        bool found = false;
+        for (int j = 0; j < seen.size(); j++) {
+            if (seen[j] == name) {
+                found = true;
+                break; // Stop searching once found
             }
         }
-    }
 
-    cout << count;
+        // Output based on whether the name was found
+        if (found) {
+            cout << "YES" << endl;
+        } else {
+            cout << "NO" << endl;
+            // Add the new name to the list for future checks
+            seen.push_back(name);
+        }
+    }
 
     return 0;
 }
