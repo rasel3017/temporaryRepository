@@ -1,39 +1,37 @@
 #include <iostream>
-#include <stack>
-#include <string>
-#include <map>
-
+#include <queue>
 using namespace std;
 
-string isBalanced(string s) {
-    stack<char> st;
-    map<char, char> matching = {{')', '('}, {'}', '{'}, {']', '['}};
-
-    for (char c : s) {
-        // If it's an opening bracket, push to stack
-        if (c == '(' || c == '{' || c == '[') {
-            st.push(c);
-        } else {
-            // It's a closing bracket
-            if (st.empty() || st.top() != matching[c]) {
-                return "NO";
-            }
-            st.pop();
-        }
-    }
-
-    return st.empty() ? "YES" : "NO";
-}
-
 int main() {
+    // Fast I/O to handle up to 100k numbers
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
     int n;
     cin >> n;
-    cin.ignore(); // Ignore the newline after the integer
+
+    priority_queue<long long> maxHeap;   // max-heap (default)
 
     for (int i = 0; i < n; ++i) {
-        string s;
-        getline(cin, s);
-        cout << isBalanced(s) << endl;
+        long long x;
+        cin >> x;
+        maxHeap.push(x);
+
+        if (i < 2) {
+            cout << "-1\n";
+        } else {
+            // Extract the three largest elements
+            long long first  = maxHeap.top(); maxHeap.pop();
+            long long second = maxHeap.top(); maxHeap.pop();
+            long long third  = maxHeap.top(); maxHeap.pop();
+
+            cout << first * second * third << "\n";
+
+            // Put them back into the heap
+            maxHeap.push(first);
+            maxHeap.push(second);
+            maxHeap.push(third);
+        }
     }
 
     return 0;
