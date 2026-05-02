@@ -34,14 +34,3 @@ int main() {
 
     return 0;
 }
-            cout << first * second * third << "\n";
-
-            // Put them back into the heap
-            maxHeap.push(first);
-            maxHeap.push(second);
-            maxHeap.push(third);
-        }
-    }
-
-    return 0;
-}
