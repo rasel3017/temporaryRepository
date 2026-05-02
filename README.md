@@ -3,28 +3,37 @@
 using namespace std;
 
 int main() {
-    // Fast I/O to handle up to 100k numbers
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n;
-    cin >> n;
+    int M, N;
+    cin >> M >> N;
 
-    priority_queue<long long> maxHeap;   // max-heap (default)
+    priority_queue<int> pq;   // max-heap (default is less<int>, gives largest)
 
-    for (int i = 0; i < n; ++i) {
-        long long x;
-        cin >> x;
-        maxHeap.push(x);
+    for (int i = 0; i < M; ++i) {
+        int seats;
+        cin >> seats;
+        pq.push(seats);
+    }
 
-        if (i < 2) {
-            cout << "-1\n";
-        } else {
-            // Extract the three largest elements
-            long long first  = maxHeap.top(); maxHeap.pop();
-            long long second = maxHeap.top(); maxHeap.pop();
-            long long third  = maxHeap.top(); maxHeap.pop();
+    long long total = 0;   // total can be up to 10^12, so use long long
 
+    for (int i = 0; i < N; ++i) {
+        int best = pq.top();   // row with most empty seats
+        pq.pop();
+
+        total += best;
+
+        if (best > 1) {
+            pq.push(best - 1);  // one more seat filled, price drops by 1
+        }
+    }
+
+    cout << total << '\n';
+
+    return 0;
+}
             cout << first * second * third << "\n";
 
             // Put them back into the heap
