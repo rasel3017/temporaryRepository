@@ -35,3 +35,17 @@ model Funding {
 
   maktab     Maktab   @relation(fields: [maktabId], references: [id])
 }
+
+
+model Event {
+  id        String   @id @default(uuid())
+  title     String
+  topic     String
+  speaker   String
+  eventDate DateTime
+  eventTime String
+  status    String   @default("upcoming")
+  mosqueId  String
+
+  mosque    Mosque   @relation(fields: [mosqueId], references: [id])
+}
