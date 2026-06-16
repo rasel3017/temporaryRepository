@@ -63,3 +63,16 @@ model Question {
   user      User     @relation(fields: [userId], references: [id])
   answers   Answer[]
 }
+
+
+model Answer {
+  id         String   @id @default(uuid())
+  body       String
+  isAccepted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  userId     String
+  questionId String
+
+  user       User     @relation(fields: [userId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id])
+}
