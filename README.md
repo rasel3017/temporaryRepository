@@ -1,37 +1,19 @@
-import { PrismaClient } from '../generated/prisma/client.js';
-import { PrismaPg } from '@prisma/adapter-pg';
+import express from "express"; import dotenv from "dotenv";//import express from "express"; its lod .env file
+import { connectDB, disconnectDB } from "./config/db.js";
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL
+dotenv.config();
+connectDB();
+
+const app = express();
+
+app.use(express.json());
+
+const PORT = process.env.PORT || 3000;
+
+const server = app.listen(PORT, () => { 
+    console.log(`Server is running on port ${PORT}`); 
 });
 
-const prisma = new PrismaClient({ adapter,
-  log:
-    process.env.NODE_ENV === "development"
-      ? ["query", "error", "warn"]
-      : ["error"],
- });
-
-
-const connectDB = async () => {
-  try {
-    await prisma.$connect();
-    console.log("DB Connected via Prisma");
-  } catch (error) {
-    console.error(`Database connection error: ${error.message}`);
-    process.exit(1);
-  }
-};
-
-const disconnectDB = async () => {
-  await prisma.$disconnect();
-};
-
-export { prisma, connectDB, disconnectDB };
-
-
-import { connectDB, disconnectDB } from "./config/db.js";
-connectDB();
 // Handle unhandled promise rejections (e.g., database connection errors)
 process.on("unhandledRejection", (err) => {
   console.error("Unhandled Rejection:", err);
