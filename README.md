@@ -23,3 +23,15 @@ model Student {
 
   maktab        Maktab   @relation(fields: [maktabId], references: [id])
 }
+
+
+model Funding {
+  id         String   @id @default(uuid())
+  donorName  String
+  amount     Float
+  note       String?
+  donatedAt  DateTime @default(now())
+  maktabId   String
+
+  maktab     Maktab   @relation(fields: [maktabId], references: [id])
+}
