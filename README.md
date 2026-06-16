@@ -49,3 +49,17 @@ model Event {
 
   mosque    Mosque   @relation(fields: [mosqueId], references: [id])
 }
+
+
+model Question {
+  id        String   @id @default(uuid())
+  title     String
+  body      String
+  category  String
+  status    String   @default("open")
+  createdAt DateTime @default(now())
+  userId    String
+
+  user      User     @relation(fields: [userId], references: [id])
+  answers   Answer[]
+}
