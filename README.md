@@ -1,11 +1,12 @@
-model Mosque {
-  id        String   @id @default(uuid())
-  name      String
-  address   String
-  region    String
-  latitude  Float?
-  longitude Float?
+model Maktab {
+  id           String   @id @default(uuid())
+  name         String
+  teacherName  String
+  teacherPhone String
+  totalSeats   Int
+  mosqueId     String
 
-  maktabs   Maktab[]
-  events    Event[]
+  mosque       Mosque    @relation(fields: [mosqueId], references: [id])
+  students     Student[]
+  fundings     Funding[]
 }
