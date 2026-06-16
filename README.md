@@ -1,14 +1,13 @@
-import express from "express";
-import dotenv from "dotenv";
+import { PrismaClient } from '../generated/prisma/client.js';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-dotenv.config();
-
-const app = express();
-
-app.use(express.json());
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL
 });
+
+const prisma = new PrismaClient({ adapter,
+  log:
+    process.env.NODE_ENV === "development"
+      ? ["query", "error", "warn"]
+      : ["error"],
+ });
