@@ -1,11 +1,11 @@
-model User {
+model Mosque {
   id        String   @id @default(uuid())
   name      String
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
+  address   String
+  region    String
+  latitude  Float?
+  longitude Float?
 
-  questions Question[]
-  answers   Answer[]
+  maktabs   Maktab[]
+  events    Event[]
 }
