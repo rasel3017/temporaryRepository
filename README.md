@@ -1,31 +1,19 @@
-// Delete mosque
-export const deleteMosque = async (req, res) => {
-  try {
-    const { id } = req.params;
+export const validateAddMosque = (req, res, next) => {
+  const { name, address, region } = req.body;
 
-    const mosque = await prisma.mosque.findUnique({
-      where: { id },
-    });
-
-    if (!mosque) {
-      return res.status(404).json({
-        success: false,
-        message: "Mosque not found",
-      });
-    }
-
-    await prisma.mosque.delete({
-      where: { id },
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Mosque deleted successfully",
-    });
-  } catch (error) {
-    res.status(500).json({
+  if (!name || !address || !region) {
+    return res.status(400).json({
       success: false,
-      message: error.message,
+      message: "Name, address and region are required",
     });
   }
+
+  if (name.trim().length < 3) {
+    return res.status(400).json({
+      success: false,
+      message: "Mosque name must be at least 3 characters",
+    });
+  }
+
+  next();
 };
