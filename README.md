@@ -1,16 +1,35 @@
-PS C:\DBMS_PROJECT\Smart_Mosque_Management> npx prisma migrate dev --name add_userId_to_mosque
-Loaded Prisma config from prisma.config.ts.
+import { verifyToken } from "../utils/jwt.js";
 
-Prisma schema loaded from prisma\schema.prisma.
-Datasource "db": PostgreSQL database "smart_mosque_db", schema "public" at "localhost:5432"
+export const protect = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
 
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "No token provided, access denied",
+      });
+    }
 
-Error: 
-⚠️ We found changes that cannot be executed:
+    const token = authHeader.split(" ")[1];
+    const decoded = verifyToken(token);
 
-  • Step 0 Added the required column `userId` to the `Mosque` table without a default value. There are 1 rows in this table, it is not possible to execute this step.
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
+    });
+  }
+};
 
-You can use prisma migrate dev --create-only to create the migration file, and manually modify it to address the underlying issue(s).
-Then run prisma migrate dev to apply it and verify it works.
-
-PS C:\DBMS_PROJECT\Smart_Mosque_Management> 
+export const adminOnly = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Access denied, admin only",
+    });
+  }
+  next();
+};
