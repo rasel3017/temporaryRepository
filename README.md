@@ -1,16 +1,1 @@
-import jwt from "jsonwebtoken";
-
-export const generateToken = (userId, role) => {
-  return jwt.sign(
-    { userId, role },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
-  );
-};
-
-export const verifyToken = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET);
-};
-
-JWT_SECRET="your_super_secret_key_here"
-JWT_EXPIRES_IN="7d"
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
