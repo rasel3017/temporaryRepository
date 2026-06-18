@@ -1,35 +1,4 @@
-import { verifyToken } from "../utils/jwt.js";
-
-export const protect = (req, res, next) => {
-  try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        success: false,
-        message: "No token provided, access denied",
-      });
-    }
-
-    const token = authHeader.split(" ")[1];
-    const decoded = verifyToken(token);
-
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: "Invalid or expired token",
-    });
-  }
-};
-
-export const adminOnly = (req, res, next) => {
-  if (req.user.role !== "admin") {
-    return res.status(403).json({
-      success: false,
-      message: "Access denied, admin only",
-    });
-  }
-  next();
-};
+{
+    "success": false,
+    "message": "\nInvalid `prisma.mosque.create()` invocation:\n\n{\n  data: {\n    name: \"Baitul Mukarram\",\n    address: \"Topkhana Road, Dhaka\",\n    region: \"Dhaka\",\n    latitude: 23.7275,\n    longitude: 90.4099,\n+   user: {\n+     create: UserCreateWithoutMosquesInput | UserUncheckedCreateWithoutMosquesInput,\n+     connectOrCreate: UserCreateOrConnectWithoutMosquesInput,\n+     connect: UserWhereUniqueInput\n+   }\n  }\n}\n\nArgument `user` is missing."
+}
