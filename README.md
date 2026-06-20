@@ -1,17 +1,8 @@
-export const validateCreateEvent = (req, res, next) => {
-  const title = req.body?.title;
-  const topic = req.body?.topic;
-  const speaker = req.body?.speaker;
-  const eventDate = req.body?.eventDate;
-  const eventTime = req.body?.eventTime;
-  const mosqueId = req.body?.mosqueId;
-
-  if (!title || !topic || !speaker || !eventDate || !eventTime || !mosqueId) {
-    return res.status(400).json({
-      success: false,
-      message: "Title, topic, speaker, eventDate, eventTime and mosqueId are required",
-    });
-  }
-
-  next();
-};
+{
+  "title": "Quran Mahfil",
+  "topic": "The Importance of Quran",
+  "speaker": "Maulana Abdullah",
+  "eventDate": "2026-07-15",
+  "eventTime": "08:00 PM",
+  "mosqueId": "your_mosque_id"
+}
