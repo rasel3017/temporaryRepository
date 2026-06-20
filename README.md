@@ -1,145 +1,108 @@
-import { prisma } from "../config/db.js";
+import { PrismaClient } from "../src/generated/prisma/client.js";
+import { PrismaPg } from "@prisma/adapter-pg";
+import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
 
-// Post a question
-export const postQuestion = async (req, res) => {
-  try {
-    const { title, body, category } = req.body;
-    const userId = req.user.userId;
+dotenv.config();
 
-    const question = await prisma.question.create({
-      data: { title, body, category, userId },
-    });
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
 
-    res.status(201).json({
-      success: true,
-      message: "Question posted successfully",
-      data: question,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+const prisma = new PrismaClient({ adapter });
 
-// Post an answer
-export const postAnswer = async (req, res) => {
-  try {
-    const { questionId } = req.params;
-    const { body } = req.body;
-    const userId = req.user.userId;
+async function main() {
+  console.log("Seeding database...");
 
-    const question = await prisma.question.findUnique({
-      where: { id: questionId },
-    });
+  // Create admin user
+  const hashedPassword = await bcrypt.hash("admin123", 12);
 
-    if (!question) {
-      return res.status(404).json({
-        success: false,
-        message: "Question not found",
-      });
-    }
+  const admin = await prisma.user.upsert({
+    where: { email: "admin@mosque.com" },
+    update: {},
+    create: {
+      name: "Admin",
+      email: "admin@mosque.com",
+      password: hashedPassword,
+      role: "admin",
+    },
+  });
 
-    const answer = await prisma.answer.create({
-      data: { body, userId, questionId },
-    });
+  console.log("Admin created:", admin.email);
 
-    res.status(201).json({
-      success: true,
-      message: "Answer posted successfully",
-      data: answer,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  // Create mosque
+  const mosque = await prisma.mosque.upsert({
+    where: { id: "seed-mosque-001" },
+    update: {},
+    create: {
+      id: "seed-mosque-001",
+      name: "Baitul Mukarram",
+      address: "Topkhana Road, Dhaka",
+      region: "Dhaka",
+      latitude: 23.7275,
+      longitude: 90.4099,
+      userId: admin.id,
+    },
+  });
 
-// Get all questions
-export const getAllQuestions = async (req, res) => {
-  try {
-    const questions = await prisma.question.findMany({
-      include: {
-        user: { select: { name: true } },
-        answers: true,
-      },
-      orderBy: { createdAt: "desc" },
-    });
+  console.log("Mosque created:", mosque.name);
 
-    res.status(200).json({
-      success: true,
-      count: questions.length,
-      data: questions,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  // Create maktab
+  const maktab = await prisma.maktab.upsert({
+    where: { id: "seed-maktab-001" },
+    update: {},
+    create: {
+      id: "seed-maktab-001",
+      name: "Baitul Mukarram Maktab",
+      teacherName: "Maulana Abdul Karim",
+      teacherPhone: "01712345678",
+      totalSeats: 50,
+      mosqueId: mosque.id,
+    },
+  });
 
-// Get answers by question
-export const getAnswersByQuestion = async (req, res) => {
-  try {
-    const { questionId } = req.params;
+  console.log("Maktab created:", maktab.name);
 
-    const answers = await prisma.answer.findMany({
-      where: { questionId },
-      include: {
-        user: { select: { name: true } },
-      },
-      orderBy: { createdAt: "asc" },
-    });
+  // Create event
+  const event = await prisma.event.upsert({
+    where: { id: "seed-event-001" },
+    update: {},
+    create: {
+      id: "seed-event-001",
+      title: "Quran Mahfil",
+      topic: "The Importance of Quran",
+      speaker: "Maulana Abdullah",
+      eventDate: new Date("2026-07-15"),
+      eventTime: "08:00 PM",
+      mosqueId: mosque.id,
+    },
+  });
 
-    res.status(200).json({
-      success: true,
-      count: answers.length,
-      data: answers,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  console.log("Event created:", event.title);
 
-// Delete a question 
-export const deleteQuestion = async (req, res) => {
-  try {
-    const { questionId } = req.params;
+  // Create question
+  const question = await prisma.question.upsert({
+    where: { id: "seed-question-001" },
+    update: {},
+    create: {
+      id: "seed-question-001",
+      title: "What is the ruling on missing Fajr prayer?",
+      body: "I sometimes miss Fajr prayer due to oversleeping. What should I do?",
+      category: "Prayer",
+      userId: admin.id,
+    },
+  });
 
-    const question = await prisma.question.findUnique({
-      where: { id: questionId },
-    });
+  console.log("Question created:", question.title);
 
-    if (!question) {
-      return res.status(404).json({
-        success: false,
-        message: "Question not found",
-      });
-    }
+  console.log("Seeding complete!");
+}
 
-    await prisma.answer.deleteMany({
-      where: { questionId },
-    });
-
-    await prisma.question.delete({
-      where: { id: questionId },
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Question and its answers deleted successfully",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
