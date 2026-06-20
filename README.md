@@ -1,8 +1,19 @@
-{
-  "title": "Quran Mahfil",
-  "topic": "The Importance of Quran",
-  "speaker": "Maulana Abdullah",
-  "eventDate": "2026-07-15",
-  "eventTime": "08:00 PM",
-  "mosqueId": "your_mosque_id"
-}
+import express from "express";
+import {
+  postQuestion,
+  postAnswer,
+  getAllQuestions,
+  getAnswersByQuestion,
+  deleteQuestion,
+} from "../controllers/qa.controller.js";
+import { protect, adminOnly } from "../middleware/auth.middleware.js";
+
+const router = express.Router();
+
+router.post("/questions", protect, postQuestion);
+router.post("/questions/:questionId/answers", protect, postAnswer);
+router.get("/questions", getAllQuestions);
+router.get("/questions/:questionId/answers", getAnswersByQuestion);
+router.delete("/questions/:questionId", protect, adminOnly, deleteQuestion);
+
+export default router;
