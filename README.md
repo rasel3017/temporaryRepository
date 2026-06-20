@@ -1,47 +1,58 @@
-Restarting 'src/server.js'
-DB Connected via Prisma
-Server is running on port 3000
-TypeError: Cannot destructure property 'amount' of 'req.body' as it is undefined.
-    at validateAddFunding (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/validation/maktab.validation.js:35:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at protect (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/middleware/auth.middleware.js:18:5)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at Route.dispatch (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:117:3)
-    at handle (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:435:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:295:15
-TypeError: Cannot destructure property 'amount' of 'req.body' as it is undefined.
-    at validateAddFunding (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/validation/maktab.validation.js:35:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at protect (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/middleware/auth.middleware.js:18:5)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at Route.dispatch (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:117:3)
-    at handle (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:435:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:295:15
-TypeError: Cannot destructure property 'amount' of 'req.body' as it is undefined.
-    at validateAddFunding (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/validation/maktab.validation.js:35:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at protect (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/middleware/auth.middleware.js:18:5)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at Route.dispatch (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:117:3)
-    at handle (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:435:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:295:15
-TypeError: Cannot destructure property 'amount' of 'req.body' as it is undefined.
-    at validateAddFunding (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/validation/maktab.validation.js:35:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at protect (file:///C:/DBMS_PROJECT/Smart_Mosque_Management/src/middleware/auth.middleware.js:18:5)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at next (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:157:13)
-    at Route.dispatch (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\route.js:117:3)
-    at handle (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:435:11)
-    at Layer.handleRequest (C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\lib\layer.js:152:17)
-    at C:\DBMS_PROJECT\Smart_Mosque_Management\node_modules\router\index.js:295:15
+export const validateAddMaktab = (req, res, next) => {
+  const name = req.body?.name;
+  const teacherName = req.body?.teacherName;
+  const teacherPhone = req.body?.teacherPhone;
+  const totalSeats = req.body?.totalSeats;
+  const mosqueId = req.body?.mosqueId;
+
+  if (!name || !teacherName || !teacherPhone || !totalSeats || !mosqueId) {
+    return res.status(400).json({
+      success: false,
+      message: "Name, teacherName, teacherPhone, totalSeats and mosqueId are required",
+    });
+  }
+
+  next();
+};
+
+export const validateEnrollStudent = (req, res, next) => {
+  const name = req.body?.name;
+  const age = req.body?.age;
+  const guardianPhone = req.body?.guardianPhone;
+
+  if (!name || !age || !guardianPhone) {
+    return res.status(400).json({
+      success: false,
+      message: "Name, age and guardianPhone are required",
+    });
+  }
+
+  if (age < 4 || age > 18) {
+    return res.status(400).json({
+      success: false,
+      message: "Student age must be between 4 and 18",
+    });
+  }
+
+  next();
+};
+
+export const validateAddFunding = (req, res, next) => {
+  const amount = req.body?.amount;
+
+  if (!amount) {
+    return res.status(400).json({
+      success: false,
+      message: "Amount is required",
+    });
+  }
+
+  if (amount <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Amount must be greater than 0",
+    });
+  }
+
+  next();
+};
