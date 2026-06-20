@@ -1,5 +1,15 @@
-{
-  "title": "What is the ruling on missing Fajr prayer?",
-  "body": "I sometimes miss Fajr prayer due to oversleeping. What should I do?",
-  "category": "Prayer"
-}
+Restarting 'src/server.js'
+DB Connected via Prisma
+Server is running on port 3000
+prisma:query INSERT INTO "public"."Question" ("id","title","body","category","status","createdAt","userId") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "public"."Question"."id", "public"."Question"."title", "public"."Question"."body", "public"."Question"."category", "public"."Question"."status", "public"."Question"."createdAt", "public"."Question"."userId"
+prisma:query SELECT "public"."Question"."id", "public"."Question"."title", "public"."Question"."body", "public"."Question"."category", "public"."Question"."status", "public"."Question"."createdAt", "public"."Question"."userId" FROM "public"."Question" WHERE ("public"."Question"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "public"."Answer" ("id","body","isAccepted","createdAt","userId","questionId") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "public"."Answer"."id", "public"."Answer"."body", "public"."Answer"."isAccepted", "public"."Answer"."createdAt", "public"."Answer"."userId", "public"."Answer"."questionId"
+prisma:query SELECT "public"."Question"."id", "public"."Question"."title", "public"."Question"."body", "public"."Question"."category", "public"."Question"."status", "public"."Question"."createdAt", "public"."Question"."userId" FROM "public"."Question" WHERE 1=1 ORDER BY "public"."Question"."createdAt" DESC OFFSET $1
+prisma:query SELECT "public"."User"."id", "public"."User"."name" FROM "public"."User" WHERE "public"."User"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Answer"."id", "public"."Answer"."body", "public"."Answer"."isAccepted", "public"."Answer"."createdAt", "public"."Answer"."userId", "public"."Answer"."questionId" FROM "public"."Answer" WHERE "public"."Answer"."questionId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Answer"."id", "public"."Answer"."body", "public"."Answer"."isAccepted", "public"."Answer"."createdAt", "public"."Answer"."userId", "public"."Answer"."questionId" FROM "public"."Answer" WHERE "public"."Answer"."questionId" = $1 ORDER BY "public"."Answer"."createdAt" ASC OFFSET $2
+prisma:query SELECT "public"."User"."id", "public"."User"."name" FROM "public"."User" WHERE "public"."User"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."Question"."id", "public"."Question"."title", "public"."Question"."body", "public"."Question"."category", "public"."Question"."status", "public"."Question"."createdAt", "public"."Question"."userId" FROM "public"."Question" WHERE ("public"."Question"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:error update or delete on table "Question" violates RESTRICT setting of foreign key constraint "Answer_questionId_fkey" on table "Answer"
+prisma:query SELECT "public"."Question"."id", "public"."Question"."title", "public"."Question"."body", "public"."Question"."category", "public"."Question"."status", "public"."Question"."createdAt", "public"."Question"."userId" FROM "public"."Question" WHERE ("public"."Question"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:error update or delete on table "Question" violates RESTRICT setting of foreign key constraint "Answer_questionId_fkey" on table "Answer"
