@@ -1,32 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Mosque Management System</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+const API = "http://localhost:3000/api";
 
-  <header>
-    <h1>🕌 Smart Mosque Management System</h1>
-    <nav>
-      <a href="#mosques">Mosques</a>
-      <a href="#events">Events</a>
-      <a href="#qa">Q&A</a>
-      <a href="#login">Login</a>
-    </nav>
-  </header>
+// Search mosques by region
+async function searchByRegion() {
+  const region = document.getElementById("regionInput").value;
 
-  <main>
-    <section id="mosques">
-      <h2>Find a Mosque</h2>
-      <input type="text" id="regionInput" placeholder="Enter region (e.g. Dhaka)">
-      <button onclick="searchByRegion()">Search</button>
-      <div id="mosqueResults"></div>
-    </section>
-  </main>
+  if (!region) {
+    alert("Please enter a region!");
+    return;
+  }
 
-  <script src="js/main.js"></script>
-</body>
-</html>
+  const response = await fetch(`${API}/mosques/region/${region}`);
+  const data = await response.json();
+
+  const resultsDiv = document.getElementById("mosqueResults");
+
+  if (data.count === 0) {
+    resultsDiv.innerHTML = "<p>No mosques found in this region.</p>";
+    return;
+  }
+
+  resultsDiv.innerHTML = data.data.map(mosque => `
+    <div class="mosque-card">
+      <h3>${mosque.name}</h3>
+      <p>${mosque.address}</p>
+      <p>Region: ${mosque.region}</p>
+    </div>
+  `).join("");
+}
