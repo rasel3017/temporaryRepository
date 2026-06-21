@@ -1,35 +1,32 @@
-// Update profile
-export const updateProfile = async (req, res) => {
-  try {
-    const userId = req.user.userId;
-    const { name, email, password } = req.body;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Mosque Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-    const updateData = {};
+  <header>
+    <h1>🕌 Smart Mosque Management System</h1>
+    <nav>
+      <a href="#mosques">Mosques</a>
+      <a href="#events">Events</a>
+      <a href="#qa">Q&A</a>
+      <a href="#login">Login</a>
+    </nav>
+  </header>
 
-    if (name) updateData.name = name;
-    if (email) updateData.email = email;
-    if (password) updateData.password = await bcrypt.hash(password, 12);
+  <main>
+    <section id="mosques">
+      <h2>Find a Mosque</h2>
+      <input type="text" id="regionInput" placeholder="Enter region (e.g. Dhaka)">
+      <button onclick="searchByRegion()">Search</button>
+      <div id="mosqueResults"></div>
+    </section>
+  </main>
 
-    const user = await prisma.user.update({
-      where: { id: userId },
-      data: updateData,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-      },
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Profile updated successfully",
-      data: user,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  <script src="js/main.js"></script>
+</body>
+</html>
