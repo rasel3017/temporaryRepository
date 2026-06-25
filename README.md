@@ -1,312 +1,646 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Mosque Management System</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --primary: #1a6b3c;
+  --primary-dark: #145530;
+  --primary-light: #e8f5ee;
+  --secondary: #f0a500;
+  --bg: #f5f5f5;
+  --card-bg: #ffffff;
+  --text: #333333;
+  --text-light: #666666;
+  --border: #dddddd;
+  --shadow: 0 2px 10px rgba(0,0,0,0.1);
+  --header-height: 65px;
+}
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
-      <span class="logo-icon">🕌</span>
-      <span class="logo-text">Smart Mosque</span>
-    </div>
-    <nav>
-      <a href="#" class="nav-link active" onclick="showSection('home')">Home</a>
-      <a href="#" class="nav-link" onclick="showSection('mosques')">Mosques</a>
-      <a href="#" class="nav-link" onclick="showSection('maktab')">Maktab</a>
-      <a href="#" class="nav-link" onclick="showSection('events')">Events</a>
-      <a href="#" class="nav-link" onclick="showSection('qa')">Q&A</a>
-      <a href="#" class="nav-link" onclick="showSection('about')">About</a>
-    </nav>
-    <div class="auth-buttons">
-      <button class="dark-toggle" onclick="toggleDark()">🌙 Dark</button>
-      <button class="btn-login" onclick="showSection('login')">Login</button>
-    </div>
-  </header>
+/* DARK MODE */
+body.dark {
+  --bg: #1a1a2e;
+  --card-bg: #16213e;
+  --text: #eaeaea;
+  --text-light: #aaaaaa;
+  --border: #333355;
+  --shadow: 0 2px 10px rgba(0,0,0,0.4);
+  --primary-light: #1a3a2a;
+}
 
-  <!-- MAIN -->
-  <main>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    <!-- HOME SECTION -->
-    <section id="home" class="section active">
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
 
-      <!-- HERO BANNER -->
-      <div class="hero" style="background-image: url('images/mosque1.jpg')">
-        <div class="hero-overlay">
-          <h1>Welcome to Smart Mosque Management System</h1>
-          <p>Find mosques, explore Maktabs, discover Islamic events and get answers to your questions.</p>
-          <div class="hero-buttons">
-            <button class="btn-primary" onclick="showSection('mosques')">🕌 Find a Mosque</button>
-            <button class="btn-secondary" onclick="showSection('events')">📅 View Events</button>
-          </div>
-        </div>
-      </div>
+/* ===== HEADER ===== */
+header {
+  background-color: var(--primary);
+  color: white;
+  padding: 0 30px;
+  height: var(--header-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
 
-      <!-- STATS BAR -->
-      <div class="stats-bar">
-        <div class="stat-item">
-          <span class="stat-number" id="totalMosques">...</span>
-          <span class="stat-label">Mosques</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" id="totalEvents">...</span>
-          <span class="stat-label">Events</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" id="totalQuestions">...</span>
-          <span class="stat-label">Questions</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">🇧🇩</span>
-          <span class="stat-label">Bangladesh</span>
-        </div>
-      </div>
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-      <!-- ANNOUNCEMENTS -->
-      <div class="home-section">
-        <h2>📢 Upcoming Events & Mahfil</h2>
-        <div id="homeEvents" class="grid-3">
-          <p>Loading events...</p>
-        </div>
-      </div>
+.logo-icon { font-size: 1.8rem; }
 
-      <!-- IMAGE GALLERY -->
-      <div class="home-section">
-        <h2>📸 Islamic Events Gallery</h2>
-        <div class="gallery">
-          <img src="images/event1.jpg" alt="Islamic Event">
-          <img src="images/event2.jpg" alt="Islamic Event">
-          <img src="images/event3.jpg" alt="Islamic Event">
-          <img src="images/event4.jpg" alt="Islamic Event">
-        </div>
-      </div>
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+}
 
-      <!-- QURAN SECTION -->
-      <div class="home-section quran-section" style="background-image: url('images/quran1.jpg')">
-        <div class="quran-overlay">
-          <h2>📖 Learn & Grow</h2>
-          <p>Join Maktabs and courses to deepen your Islamic knowledge.</p>
-          <button class="btn-primary" onclick="showSection('maktab')">Explore Maktabs</button>
-        </div>
-      </div>
+nav {
+  display: flex;
+  gap: 5px;
+}
 
-      <!-- FEATURES -->
-      <div class="home-section">
-        <h2>🌟 What We Offer</h2>
-        <div class="features">
-          <div class="feature-card" onclick="showSection('mosques')">
-            <span>🕌</span>
-            <h3>Mosque Finder</h3>
-            <p>Find mosques in your region with detailed information and location.</p>
-          </div>
-          <div class="feature-card" onclick="showSection('maktab')">
-            <span>📚</span>
-            <h3>Maktab Management</h3>
-            <p>Explore Islamic schools, enroll your children and support with donations.</p>
-          </div>
-          <div class="feature-card" onclick="showSection('events')">
-            <span>📅</span>
-            <h3>Events & Mahfil</h3>
-            <p>Discover upcoming Islamic events and Mahfil near you.</p>
-          </div>
-          <div class="feature-card" onclick="showSection('qa')">
-            <span>❓</span>
-            <h3>Q&A System</h3>
-            <p>Ask Islamic questions and get answers from the community.</p>
-          </div>
-        </div>
-      </div>
+.nav-link {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
 
-    </section>
+.nav-link:hover,
+.nav-link.active {
+  background-color: rgba(255,255,255,0.2);
+  color: white;
+}
 
-    <!-- MOSQUES SECTION -->
-    <section id="mosques" class="section">
-      <div class="section-header" style="background-image: url('images/mosque2.jpg')">
-        <div class="section-header-overlay">
-          <h2>🕌 Find a Mosque</h2>
-          <p>Search mosques across Bangladesh by region or name</p>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="search-row">
-          <div class="search-box">
-            <input type="text" id="regionInput" placeholder="Search by region (e.g. Dhaka)">
-            <button onclick="searchByRegion()">Search</button>
-          </div>
-          <div class="search-box">
-            <input type="text" id="searchNameInput" placeholder="Search by name (e.g. Baitul)">
-            <button onclick="searchByName()">Search</button>
-          </div>
-        </div>
-        <div id="mosqueResults" class="results"></div>
-      </div>
-    </section>
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    <!-- MAKTAB SECTION -->
-    <section id="maktab" class="section">
-      <div class="section-header" style="background-image: url('images/quran2.jpg')">
-        <div class="section-header-overlay">
-          <h2>📚 Maktab</h2>
-          <p>Islamic schools attached to mosques across Bangladesh</p>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="search-box">
-          <input type="text" id="mosqueIdInput" placeholder="Enter Mosque ID to find Maktabs">
-          <button onclick="getMaktabs()">Find Maktabs</button>
-        </div>
-        <div id="maktabResults" class="results"></div>
-      </div>
-    </section>
+.btn-login {
+  background: white;
+  color: var(--primary);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
 
-    <!-- EVENTS SECTION -->
-    <section id="events" class="section">
-      <div class="section-header" style="background-image: url('images/event1.jpg')">
-        <div class="section-header-overlay">
-          <h2>📅 Islamic Events & Mahfil</h2>
-          <p>Discover upcoming Islamic events and Mahfil near you</p>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="search-box">
-          <input type="text" id="eventRegionInput" placeholder="Enter region (e.g. Dhaka)">
-          <button onclick="getEvents()">Find Events</button>
-        </div>
-        <div id="eventResults" class="results"></div>
-      </div>
-    </section>
+.btn-login:hover {
+  background: var(--secondary);
+  color: white;
+}
 
-    <!-- Q&A SECTION -->
-    <section id="qa" class="section">
-      <div class="section-header" style="background-image: url('images/quran3.jpg')">
-        <div class="section-header-overlay">
-          <h2>❓ Questions & Answers</h2>
-          <p>Ask Islamic questions and get answers from the community</p>
-        </div>
-      </div>
-      <div class="section-body">
-        <button class="btn-primary" onclick="getAllQuestions()">Load All Questions</button>
-        <div id="qaResults" class="results"></div>
-      </div>
-    </section>
+.dark-toggle {
+  background: none;
+  border: 2px solid rgba(255,255,255,0.5);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
 
-    <!-- ABOUT SECTION -->
-    <section id="about" class="section">
-      <div class="section-header" style="background-image: url('images/mosque3.jpg')">
-        <div class="section-header-overlay">
-          <h2>About This Project</h2>
-          <p>Smart Mosque Management System — CSE-2423</p>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="about-content">
-          <p>The <strong>Smart Mosque Management System</strong> is a DBMS course project built to help manage mosque-related activities in Bangladesh.</p>
-          <br>
-          <h3>✅ Completed Features</h3>
-          <ul>
-            <li>🕌 Mosque Route & Recommendation</li>
-            <li>📚 Maktab Management</li>
-            <li>📅 Mahfil Event Locator</li>
-            <li>❓ Question & Answer System</li>
-            <li>🔐 User Authentication</li>
-          </ul>
-          <br>
-          <h3>🔲 Planned Features</h3>
-          <ul>
-            <li>📖 Course / Learning Module</li>
-            <li>🕐 Prayer Time Schedule</li>
-            <li>🗺️ Google Maps Integration</li>
-            <li>📊 Admin Dashboard</li>
-          </ul>
-          <br>
-          <h3>🛠️ Technologies Used</h3>
-          <ul>
-            <li>Node.js & Express.js</li>
-            <li>PostgreSQL & Prisma ORM v7</li>
-            <li>HTML, CSS, JavaScript</li>
-            <li>JWT Authentication</li>
-          </ul>
-          <br>
-          <p><strong>Course:</strong> Database Management System (CSE-2423)</p>
-        </div>
-      </div>
-    </section>
+.dark-toggle:hover {
+  background: rgba(255,255,255,0.2);
+}
 
-    <!-- LOGIN SECTION -->
-    <section id="login" class="section">
-      <div class="auth-container">
-        <div class="auth-image" style="background-image: url('images/mosque4.jpg')"></div>
-        <div class="auth-form">
-          <h2>Login</h2>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="loginEmail" placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="loginPassword" placeholder="Enter your password">
-          </div>
-          <button class="btn-primary btn-full" onclick="login()">Login</button>
-          <p style="margin-top: 15px; text-align:center;">Don't have an account? <a href="#" onclick="showSection('register')">Register</a></p>
-        </div>
-      </div>
-    </section>
+/* ===== MAIN ===== */
+main {
+  min-height: calc(100vh - var(--header-height) - 200px);
+}
 
-    <!-- REGISTER SECTION -->
-    <section id="register" class="section">
-      <div class="auth-container">
-        <div class="auth-image" style="background-image: url('images/mosque1.jpg')"></div>
-        <div class="auth-form">
-          <h2>Register</h2>
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" id="registerName" placeholder="Enter your name">
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="registerEmail" placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="registerPassword" placeholder="Enter your password">
-          </div>
-          <button class="btn-primary btn-full" onclick="register()">Register</button>
-          <p style="margin-top: 15px; text-align:center;">Already have an account? <a href="#" onclick="showSection('login')">Login</a></p>
-        </div>
-      </div>
-    </section>
+/* ===== SECTIONS ===== */
+.section { display: none; }
+.section.active { display: block; }
 
-  </main>
+/* ===== HERO ===== */
+.hero {
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3>🕌 Smart Mosque</h3>
-        <p>A complete mosque management system for Bangladesh.</p>
-      </div>
-      <div class="footer-section">
-        <h3>Quick Links</h3>
-        <a href="#" onclick="showSection('mosques')">Mosques</a>
-        <a href="#" onclick="showSection('events')">Events</a>
-        <a href="#" onclick="showSection('qa')">Q&A</a>
-        <a href="#" onclick="showSection('about')">About</a>
-      </div>
-      <div class="footer-section">
-        <h3>Course Info</h3>
-        <p>Database Management System</p>
-        <p>Course Code: CSE-2423</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 Smart Mosque Management System. All rights reserved.</p>
-    </div>
-  </footer>
+.hero-overlay {
+  background: rgba(0,0,0,0.55);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+  color: white;
+}
 
-  <script src="js/main.js"></script>
-</body>
-</html>
+.hero-overlay h1 {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-overlay p {
+  font-size: 1.15rem;
+  margin-bottom: 25px;
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  background: var(--primary);
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  padding: 20px;
+}
+
+.stat-item {
+  text-align: center;
+  color: white;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* ===== HOME SECTIONS ===== */
+.home-section {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.home-section h2 {
+  color: var(--primary);
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  border-bottom: 3px solid var(--primary-light);
+  padding-bottom: 10px;
+}
+
+/* ===== GALLERY ===== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.gallery img:hover {
+  transform: scale(1.03);
+}
+
+/* ===== QURAN SECTION ===== */
+.quran-section {
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 !important;
+}
+
+.quran-overlay {
+  background: rgba(26, 107, 60, 0.85);
+  padding: 60px 40px;
+  text-align: center;
+  color: white;
+}
+
+.quran-overlay h2 {
+  color: white !important;
+  border: none !important;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.quran-overlay p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+/* ===== GRID ===== */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.section-header-overlay {
+  background: rgba(0,0,0,0.55);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+.section-header-overlay h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.section-header-overlay p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* ===== SECTION BODY ===== */
+.section-body {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+/* ===== SEARCH ===== */
+.search-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  min-width: 250px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--card-bg);
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s;
+}
+
+.search-box input:focus {
+  border-color: var(--primary);
+}
+
+.search-box button {
+  padding: 12px 25px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.search-box button:hover {
+  background: var(--primary-dark);
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 5px;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 5px;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.btn-full {
+  width: 100%;
+  margin: 0;
+  padding: 14px;
+  font-size: 1.05rem;
+}
+
+/* ===== CARDS ===== */
+.results { margin-top: 15px; }
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
+}
+
+.card:hover { transform: translateY(-2px); }
+
+.card h3 {
+  color: var(--primary);
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.card p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.card-badge {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+/* ===== FEATURES ===== */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.feature-card:hover { transform: translateY(-4px); }
+
+.feature-card span { font-size: 2.5rem; }
+
+.feature-card h3 {
+  margin: 10px 0 8px;
+  color: var(--primary);
+}
+
+.feature-card p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* ===== AUTH ===== */
+.auth-container {
+  display: flex;
+  min-height: 500px;
+  max-width: 900px;
+  margin: 40px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.auth-image {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  min-height: 400px;
+}
+
+.auth-form {
+  flex: 1;
+  background: var(--card-bg);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-form h2 {
+  color: var(--primary);
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+.form-group { margin-bottom: 20px; }
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--card-bg);
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-group input:focus { border-color: var(--primary); }
+
+/* ===== ABOUT ===== */
+.about-content {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  line-height: 1.8;
+}
+
+.about-content h3 {
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.about-content ul {
+  list-style: none;
+  padding-left: 10px;
+}
+
+.about-content ul li { padding: 5px 0; }
+
+/* ===== FOOTER ===== */
+footer {
+  background: #1a1a2e;
+  color: #ccc;
+  margin-top: 60px;
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.footer-section h3 {
+  color: white;
+  margin-bottom: 15px;
+}
+
+.footer-section p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.footer-section a {
+  display: block;
+  color: #aaa;
+  text-decoration: none;
+  padding: 3px 0;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-section a:hover { color: white; }
+
+.footer-bottom {
+  border-top: 1px solid #333;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 15px;
+    gap: 10px;
+  }
+
+  nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .nav-link {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .hero { height: 350px; }
+  .hero-overlay h1 { font-size: 1.5rem; }
+
+  .stats-bar { gap: 25px; }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-image { min-height: 200px; }
+
+  .search-row { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .logo-text { font-size: 1rem; }
+  .stats-bar { gap: 15px; }
+  .stat-number { font-size: 1.5rem; }
+  .gallery { grid-template-columns: 1fr 1fr; }
+  .hero-overlay h1 { font-size: 1.2rem; }
+}
