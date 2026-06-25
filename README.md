@@ -1,24 +1,38 @@
-import { prisma } from "../config/db.js";
-
-// Add a new mosque
-export const addMosque = async (req, res) => {
+// Add a new Maktab
+export const addMaktab = async (req, res) => {
   try {
-    const { name, address, region, latitude, longitude, imamName, muazzinName, imageUrl, fajrTime, zuhrTime, asrTime, maghribTime, ishaTime } = req.body;
-    const userId = req.user.userId;
+    const { name, address, teacherName, teacherPhone, totalSeats, coursesOffered, imageUrl, mosqueId } = req.body;
 
-    const mosque = await prisma.mosque.create({
-      data: { 
-        name, address, region, latitude, longitude,
-        imamName, muazzinName, imageUrl,
-        fajrTime, zuhrTime, asrTime, maghribTime, ishaTime,
-        user: { connect: { id: userId } }
+    if (mosqueId) {
+      const mosque = await prisma.mosque.findUnique({
+        where: { id: mosqueId },
+      });
+
+      if (!mosque) {
+        return res.status(404).json({
+          success: false,
+          message: "Mosque not found",
+        });
+      }
+    }
+
+    const maktab = await prisma.maktab.create({
+      data: {
+        name,
+        address,
+        teacherName,
+        teacherPhone,
+        totalSeats,
+        coursesOffered,
+        imageUrl,
+        mosqueId,
       },
     });
 
     res.status(201).json({
       success: true,
-      message: "Mosque added successfully",
-      data: mosque,
+      message: "Maktab added successfully",
+      data: maktab,
     });
   } catch (error) {
     res.status(500).json({
