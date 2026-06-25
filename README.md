@@ -1,43 +1,17 @@
-// Create event
-export const createEvent = async (req, res) => {
-  try {
-    const { title, topic, speaker, eventDate, eventTime, location, description, imageUrl, isFree, mosqueId } = req.body;
+export const validateCreateEvent = (req, res, next) => {
+  const title = req.body?.title;
+  const topic = req.body?.topic;
+  const speaker = req.body?.speaker;
+  const eventDate = req.body?.eventDate;
+  const eventTime = req.body?.eventTime;
+  const mosqueId = req.body?.mosqueId;
 
-    const mosque = await prisma.mosque.findUnique({
-      where: { id: mosqueId },
-    });
-
-    if (!mosque) {
-      return res.status(404).json({
-        success: false,
-        message: "Mosque not found",
-      });
-    }
-
-    const event = await prisma.event.create({
-      data: {
-        title,
-        topic,
-        speaker,
-        eventDate: new Date(eventDate),
-        eventTime,
-        location,
-        description,
-        imageUrl,
-        isFree: isFree !== undefined ? isFree : true,
-        mosqueId,
-      },
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Event created successfully",
-      data: event,
-    });
-  } catch (error) {
-    res.status(500).json({
+  if (!title || !topic || !speaker || !eventDate || !eventTime || !mosqueId) {
+    return res.status(400).json({
       success: false,
-      message: error.message,
+      message: "Title, topic, speaker, eventDate, eventTime and mosqueId are required",
     });
   }
+
+  next();
 };
