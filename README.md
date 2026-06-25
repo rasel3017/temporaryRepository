@@ -1,18 +1,38 @@
-// Get all Maktabs
-export const getAllMaktabs = async (req, res) => {
+// Create event
+export const createEvent = async (req, res) => {
   try {
-    const maktabs = await prisma.maktab.findMany({
-      include: {
-        mosque: {
-          select: { name: true, region: true }
-        }
-      }
+    const { title, topic, speaker, eventDate, eventTime, location, description, imageUrl, isFree, mosqueId } = req.body;
+
+    const mosque = await prisma.mosque.findUnique({
+      where: { id: mosqueId },
     });
 
-    res.status(200).json({
+    if (!mosque) {
+      return res.status(404).json({
+        success: false,
+        message: "Mosque not found",
+      });
+    }
+
+    const event = await prisma.event.create({
+      data: {
+        title,
+        topic,
+        speaker,
+        eventDate: new Date(eventDate),
+        eventTime,
+        location,
+        description,
+        imageUrl,
+        isFree: isFree !== undefined ? isFree : true,
+        mosqueId,
+      },
+    });
+
+    res.status(201).json({
       success: true,
-      count: maktabs.length,
-      data: maktabs,
+      message: "Event created successfully",
+      data: event,
     });
   } catch (error) {
     res.status(500).json({
