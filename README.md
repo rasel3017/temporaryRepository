@@ -1,38 +1,18 @@
-// Add a new Maktab
-export const addMaktab = async (req, res) => {
+// Get all Maktabs
+export const getAllMaktabs = async (req, res) => {
   try {
-    const { name, address, teacherName, teacherPhone, totalSeats, coursesOffered, imageUrl, mosqueId } = req.body;
-
-    if (mosqueId) {
-      const mosque = await prisma.mosque.findUnique({
-        where: { id: mosqueId },
-      });
-
-      if (!mosque) {
-        return res.status(404).json({
-          success: false,
-          message: "Mosque not found",
-        });
+    const maktabs = await prisma.maktab.findMany({
+      include: {
+        mosque: {
+          select: { name: true, region: true }
+        }
       }
-    }
-
-    const maktab = await prisma.maktab.create({
-      data: {
-        name,
-        address,
-        teacherName,
-        teacherPhone,
-        totalSeats,
-        coursesOffered,
-        imageUrl,
-        mosqueId,
-      },
     });
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: "Maktab added successfully",
-      data: maktab,
+      count: maktabs.length,
+      data: maktabs,
     });
   } catch (error) {
     res.status(500).json({
