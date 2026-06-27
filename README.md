@@ -1,33 +1,10 @@
-<!-- PRAYER TIMES SECTION -->
-<section id="prayer" class="section">
-  <div class="section-header" style="background-image: url('images/mosque4.jpg')">
-    <div class="section-header-overlay">
-      <h2>🕐 Prayer Times</h2>
-      <p>Daily prayer times for any district in Bangladesh</p>
-    </div>
-  </div>
-  <div class="section-body">
-    <div class="search-box">
-      <input type="text" id="prayerCity" placeholder="Enter city/district (e.g. Dhaka, Chittagong)">
-      <button onclick="fetchPrayerTimes(document.getElementById('prayerCity').value)">Get Times</button>
-    </div>
-    <div id="prayerResults"></div>
-  </div>
-</section>
-
-<!-- RAMADAN SECTION -->
-<section id="ramadan" class="section">
-  <div class="section-header" style="background-image: url('images/quran4.jpg')">
-    <div class="section-header-overlay">
-      <h2>🌙 Ramadan Schedule 2027</h2>
-      <p>Sehri and Iftar times by district</p>
-    </div>
-  </div>
-  <div class="section-body">
-    <div class="search-box">
-      <input type="text" id="ramadanCity" placeholder="Enter city/district (e.g. Dhaka, Chittagong)">
-      <button onclick="fetchRamadanSchedule(document.getElementById('ramadanCity').value)">Get Schedule</button>
-    </div>
-    <div id="ramadanResults"></div>
-  </div>
-</section>
+<nav>
+  <a href="#" class="nav-link active" onclick="showSection('home')">Home</a>
+  <a href="#" class="nav-link" onclick="showSection('mosques')">Mosques</a>
+  <a href="#" class="nav-link" onclick="showSection('maktab')">Maktab</a>
+  <a href="#" class="nav-link" onclick="showSection('events')">Events</a>
+  <a href="#" class="nav-link" onclick="showSection('qa')">Q&A</a>
+  <a href="#" class="nav-link" onclick="showSection('prayer')">🕐 Prayer</a>
+  <a href="#" class="nav-link" onclick="showSection('ramadan')">🌙 Ramadan</a>
+  <a href="#" class="nav-link" onclick="showSection('about')">About</a>
+</nav>
