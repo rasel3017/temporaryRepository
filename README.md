@@ -1,5 +1,87 @@
-{
-  "amount": 10000,
-  "note": "For mosque renovation",
-  "donorName": "Abdullah Al Mamun"
-}
+const mosque1 = await prisma.mosque.upsert({
+  where: { id: "seed-mosque-001" },
+  update: {},
+  create: {
+    id: "seed-mosque-001",
+    name: "Baitul Mukarram",
+    address: "Topkhana Road, Dhaka",
+    region: "Dhaka",
+    latitude: 23.7275,
+    longitude: 90.4099,
+    imamName: "Maulana Muhammad Salahuddin",
+    muazzinName: "Hafez Abdul Karim",
+    imageUrl: "images/mosque1.jpg",
+    fajrTime: "4:30 AM",
+    zuhrTime: "12:15 PM",
+    asrTime: "4:45 PM",
+    maghribTime: "6:45 PM",
+    ishaTime: "8:00 PM",
+    userId: admin.id,
+  },
+});
+
+const mosque2 = await prisma.mosque.upsert({
+  where: { id: "seed-mosque-002" },
+  update: {},
+  create: {
+    id: "seed-mosque-002",
+    name: "Star Mosque",
+    address: "Armanitola, Old Dhaka",
+    region: "Dhaka",
+    latitude: 23.7104,
+    longitude: 90.4074,
+    imamName: "Maulana Ibrahim Khalil",
+    muazzinName: "Hafez Yusuf Ali",
+    imageUrl: "images/mosque2.jpg",
+    fajrTime: "4:30 AM",
+    zuhrTime: "12:15 PM",
+    asrTime: "4:45 PM",
+    maghribTime: "6:45 PM",
+    ishaTime: "8:00 PM",
+    userId: admin.id,
+  },
+});
+
+const mosque3 = await prisma.mosque.upsert({
+  where: { id: "seed-mosque-003" },
+  update: {},
+  create: {
+    id: "seed-mosque-003",
+    name: "Shahi Jame Mosque",
+    address: "Rajshahi City",
+    region: "Rajshahi",
+    latitude: 24.3745,
+    longitude: 88.6042,
+    imamName: "Maulana Abdul Aziz",
+    muazzinName: "Hafez Omar Faruk",
+    imageUrl: "images/mosque3.jpg",
+    fajrTime: "4:25 AM",
+    zuhrTime: "12:10 PM",
+    asrTime: "4:40 PM",
+    maghribTime: "6:40 PM",
+    ishaTime: "7:55 PM",
+    userId: admin.id,
+  },
+});
+
+const mosque4 = await prisma.mosque.upsert({
+  where: { id: "seed-mosque-004" },
+  update: {},
+  create: {
+    id: "seed-mosque-004",
+    name: "Sixty Dome Mosque",
+    address: "Bagerhat",
+    region: "Khulna",
+    latitude: 22.6602,
+    longitude: 89.7304,
+    imamName: "Maulana Hafezur Rahman",
+    muazzinName: "Hafez Abdullah",
+    imageUrl: "images/mosque4.jpg",
+    fajrTime: "4:35 AM",
+    zuhrTime: "12:20 PM",
+    asrTime: "4:50 PM",
+    maghribTime: "6:50 PM",
+    ishaTime: "8:05 PM",
+    userId: admin.id,
+  },
+});
