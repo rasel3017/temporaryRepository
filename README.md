@@ -1,63 +1,12 @@
-let allQuestionsData = [];
-let questionsShown = 3;
-
-async function getAllQuestions() {
-  const div = document.getElementById("qaResults");
-  div.innerHTML = "<p>Loading questions...</p>";
-
-  try {
-    const res = await fetch(`${API}/qa/questions`);
-    const data = await res.json();
-
-    if (data.count === 0) {
-      div.innerHTML = "<p>No questions yet. Be the first to ask!</p>";
-      return;
-    }
-
-    allQuestionsData = data.data;
-    questionsShown = 3;
-    renderQuestions();
-  } catch (err) {
-    div.innerHTML = "<p>Could not load questions.</p>";
-  }
-}
-
-function renderQuestions() {
-  const div = document.getElementById("qaResults");
-  const toShow = allQuestionsData.slice(0, questionsShown);
-
-  div.innerHTML = toShow.map(q => `
-    <div class="card qa-card">
-      <h3>❓ ${q.title}</h3>
-      <p>${q.body}</p>
-      <p>📂 Category: ${q.category}</p>
-      <p>👤 Asked by: ${q.user?.name}</p>
-      <p>💬 ${q.answers?.length || 0} Answer(s)</p>
-      <span class="card-badge">${q.status}</span>
-      ${q.answers && q.answers.length > 0 ? `
-        <div class="answers">
-          <h4>Answers:</h4>
-          ${q.answers.map(a => `
-            <div class="answer-item">
-              <p>${a.body}</p>
-              ${a.isAccepted ? '<span class="card-badge accepted">✅ Best Answer</span>' : ""}
-            </div>
-          `).join("")}
-        </div>
-      ` : ""}
-      <div class="answer-form">
-        <input type="text" id="answer-${q.id}" placeholder="Write your answer...">
-        <button onclick="postAnswer('${q.id}')">Reply</button>
-      </div>
-    </div>
-  `).join("");
-
-  if (questionsShown < allQuestionsData.length) {
-    div.innerHTML += `<button class="btn-primary" onclick="loadMoreQuestions()">Load More Questions</button>`;
-  }
-}
-
-function loadMoreQuestions() {
-  questionsShown += 3;
-  renderQuestions();
-}
+Question 1:
+Title: Is it permissible to fast on Fridays only?
+Details: I want to fast every Friday for extra reward. Is this allowed in Islam?
+Category: Fasting
+Question 2:
+Title: What dua should I recite before sleeping?
+Details: I want to know the authentic duas recommended before going to sleep.
+Category: Dua
+Question 3:
+Title: How much Zakat should I pay on savings?
+Details: I have savings in my bank account for over a year. How do I calculate Zakat on it?
+Category: Zakat
