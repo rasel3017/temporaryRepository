@@ -1,15 +1,18 @@
-.delete-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  margin-left: 10px;
-  transition: background 0.2s;
-}
+function updateAuthUI() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const authButtons = document.querySelector(".auth-buttons");
 
-.delete-btn:hover {
-  background: #c82333;
+  if (user) {
+    authButtons.innerHTML = `
+      ${user.role === "admin" ? `<a href="#" class="nav-link" onclick="showSection('admin')">⚙️ Admin</a>` : ""}
+      <a href="#" class="nav-link" onclick="showSection('profile'); loadProfile();">👤 ${user.name}</a>
+      <button class="btn-login" onclick="logout()">Logout</button>
+      <button class="dark-toggle" onclick="toggleDark()">🌙 Dark</button>
+    `;
+  } else {
+    authButtons.innerHTML = `
+      <button class="btn-login" onclick="showSection('login')">Login</button>
+      <button class="dark-toggle" onclick="toggleDark()">🌙 Dark</button>
+    `;
+  }
 }
