@@ -1,28 +1,15 @@
-${isAdmin() ? `<button class="delete-btn" onclick="deleteQuestion('${q.id}')">🗑️ Delete</button>` : ""}
-
-
-function isAdmin() {
-  const user = JSON.parse(localStorage.getItem("user"));
-  return user && user.role === "admin";
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-left: 10px;
+  transition: background 0.2s;
 }
 
-async function deleteQuestion(questionId) {
-  if (!confirm("Are you sure you want to delete this question?")) return;
-
-  try {
-    const res = await fetch(`${API}/qa/questions/${questionId}`, {
-      method: "DELETE",
-      headers: { "Authorization": `Bearer ${token}` }
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      alert("Question deleted!");
-      getAllQuestions();
-    } else {
-      alert(data.message);
-    }
-  } catch (err) {
-    alert("Failed to delete question.");
-  }
+.delete-btn:hover {
+  background: #c82333;
 }
