@@ -1,68 +1,160 @@
-<!-- ENROLL STUDENT FORM -->
-<div id="enrollStudentTab" class="admin-tab-content">
-  <div class="form-container">
-    <h3>Enroll Student</h3>
-    <div class="form-group"><label>Maktab ID</label><input type="text" id="s_maktabId" placeholder="Maktab ID"></div>
-    <div class="form-group"><label>Student Name</label><input type="text" id="s_name" placeholder="Student name"></div>
-    <div class="form-group"><label>Age</label><input type="number" id="s_age" placeholder="Age"></div>
-    <div class="form-group"><label>Address</label><input type="text" id="s_address" placeholder="Address"></div>
-    <div class="form-group"><label>Guardian Phone</label><input type="text" id="s_phone" placeholder="Guardian phone"></div>
-    <button class="btn-primary btn-full" onclick="adminEnrollStudent()">Enroll Student</button>
-  </div>
-</div>
+async function adminEnrollStudent() {
+  const maktabId = document.getElementById("s_maktabId").value;
+  const name = document.getElementById("s_name").value;
+  const age = parseInt(document.getElementById("s_age").value);
+  const address = document.getElementById("s_address").value;
+  const guardianPhone = document.getElementById("s_phone").value;
 
-<!-- ADD FUNDING FORM -->
-<div id="addFundingTab" class="admin-tab-content">
-  <div class="form-container">
-    <h3>Add Funding</h3>
-    <div class="form-group">
-      <label>Fund To</label>
-      <select id="f_type" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-        <option value="mosque">Mosque</option>
-        <option value="maktab">Maktab</option>
-      </select>
-    </div>
-    <div class="form-group"><label>Mosque/Maktab ID</label><input type="text" id="f_id" placeholder="ID of mosque or maktab"></div>
-    <div class="form-group"><label>Donor Name (optional)</label><input type="text" id="f_donor" placeholder="Leave blank for Anonymous"></div>
-    <div class="form-group"><label>Amount (BDT)</label><input type="number" id="f_amount" placeholder="5000"></div>
-    <div class="form-group"><label>Note</label><input type="text" id="f_note" placeholder="Purpose of donation"></div>
-    <button class="btn-primary btn-full" onclick="adminAddFunding()">Add Funding</button>
-  </div>
-</div>
+  if (!maktabId || !name || !age || !guardianPhone) { alert("Maktab ID, name, age and guardian phone are required!"); return; }
 
-<!-- VIEW DATA -->
-<div id="viewDataTab" class="admin-tab-content">
-  <div class="section-body" style="padding:0;">
-    <div class="search-box" style="margin-bottom:15px;">
-      <input type="text" id="v_maktabId" placeholder="Enter Maktab ID to view students">
-      <button onclick="adminGetStudents()">View Students</button>
-    </div>
-    <div id="studentResults" class="results"></div>
-    <div class="search-box" style="margin-top:20px; margin-bottom:15px;">
-      <select id="v_fundType" style="padding:12px; border:1px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-        <option value="mosque">Mosque Funding</option>
-        <option value="maktab">Maktab Funding</option>
-      </select>
-      <input type="text" id="v_fundId" placeholder="Enter Mosque/Maktab ID">
-      <button onclick="adminGetFunding()">View Funding</button>
-    </div>
-    <div id="fundingResults" class="results"></div>
-  </div>
-</div>
+  try {
+    const res = await fetch(`${API}/maktabs/${maktabId}/students`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ name, age, address, guardianPhone }),
+    });
+    const data = await res.json();
 
-<!-- DELETE TAB -->
-<div id="deleteTab" class="admin-tab-content">
-  <div class="form-container">
-    <h3>Delete Records</h3>
-    <div class="form-group">
-      <label>What to delete?</label>
-      <select id="d_type" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-        <option value="mosque">Mosque</option>
-        <option value="maktab">Maktab</option>
-        <option value="event">Event</option>
-      </select>
-    </div>
-    <div class="form-group"><label>ID</label><input type="text" id="d_id" placeholder="Enter ID to delete"></div>
-    <button class="delete-btn" style="width:100%; padding:14px;" onclick="adminDelete()">🗑️ Delete</button>
-  </div>
-</div>
+    if (data.success) {
+      alert("Student enrolled successfully!");
+      document.querySelectorAll("#enrollStudentTab input").forEach(i => i.value = "");
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    alert("Failed to enroll student.");
+  }
+}
+
+async function adminAddFunding() {
+  const type = document.getElementById("f_type").value;
+  const id = document.getElementById("f_id").value;
+  const donorName = document.getElementById("f_donor").value || "Anonymous";
+  const amount = Number(document.getElementById("f_amount").value);
+  const note = document.getElementById("f_note").value;
+
+  if (!id || !amount) { alert("ID and amount are required!"); return; }
+
+  const url = type === "mosque" 
+    ? `${API}/mosques/${id}/funding` 
+    : `${API}/maktabs/${id}/funding`;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ donorName, amount, note }),
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Funding added successfully!");
+      document.querySelectorAll("#addFundingTab input").forEach(i => i.value = "");
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    alert("Failed to add funding.");
+  }
+}
+
+async function adminGetStudents() {
+  const maktabId = document.getElementById("v_maktabId").value;
+  if (!maktabId) { alert("Please enter a Maktab ID!"); return; }
+
+  const div = document.getElementById("studentResults");
+  div.innerHTML = "<p>Loading...</p>";
+
+  try {
+    const res = await fetch(`${API}/maktabs/${maktabId}/students`);
+    const data = await res.json();
+
+    if (data.count === 0) {
+      div.innerHTML = "<p>No students found.</p>";
+      return;
+    }
+
+    div.innerHTML = data.data.map(s => `
+      <div class="card">
+        <h3>👤 ${s.name}</h3>
+        <p>🎂 Age: ${s.age}</p>
+        ${s.address ? `<p>📍 ${s.address}</p>` : ""}
+        <p>📞 Guardian: ${s.guardianPhone}</p>
+        <p>📅 Enrolled: ${new Date(s.enrolledAt).toLocaleDateString()}</p>
+      </div>
+    `).join("");
+  } catch (err) {
+    div.innerHTML = "<p>Failed to load students.</p>";
+  }
+}
+
+async function adminGetFunding() {
+  const type = document.getElementById("v_fundType").value;
+  const id = document.getElementById("v_fundId").value;
+  if (!id) { alert("Please enter an ID!"); return; }
+
+  const div = document.getElementById("fundingResults");
+  div.innerHTML = "<p>Loading...</p>";
+
+  const url = type === "mosque"
+    ? `${API}/mosques/${id}/funding`
+    : `${API}/maktabs/${id}/funding`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.count === 0) {
+      div.innerHTML = "<p>No funding records found.</p>";
+      return;
+    }
+
+    div.innerHTML = `
+      <div class="card">
+        <h3>💰 Total: ${data.totalAmount} BDT</h3>
+        <p>📊 ${data.count} donation(s)</p>
+      </div>
+      ${data.data.map(f => `
+        <div class="card">
+          <h3>👤 ${f.donorName}</h3>
+          <p>💵 Amount: ${f.amount} BDT</p>
+          ${f.note ? `<p>📝 ${f.note}</p>` : ""}
+          <p>📅 ${new Date(f.donatedAt).toLocaleDateString()}</p>
+        </div>
+      `).join("")}
+    `;
+  } catch (err) {
+    div.innerHTML = "<p>Failed to load funding.</p>";
+  }
+}
+
+async function adminDelete() {
+  const type = document.getElementById("d_type").value;
+  const id = document.getElementById("d_id").value;
+
+  if (!id) { alert("Please enter an ID!"); return; }
+  if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
+
+  const urls = {
+    mosque: `${API}/mosques/${id}`,
+    maktab: `${API}/maktabs/${id}`,
+    event: `${API}/events/${id}`
+  };
+
+  try {
+    const res = await fetch(urls[type], {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      alert(`${type} deleted successfully!`);
+      document.getElementById("d_id").value = "";
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    alert(`Failed to delete ${type}.`);
+  }
+}
