@@ -1,8 +1,8 @@
-Name: Kakrail Mosque
+Name: Kakrail Maktab
 Address: Kakrail, Dhaka
-Region: Dhaka
-Imam Name: Maulana Mahmudul Hasan
-Muazzin Name: Hafez Rafiqul Islam
-Image URL: images/mosque3.jpg
-Latitude: 23.7372
-Longitude: 90.4076
+Ustad Name: Maulana Rafiq Ahmed
+Phone: 01711223344
+Total Seats: 40
+Courses Offered: Quran Recitation, Tajweed
+Image URL: images/quran2.jpg
+Mosque ID: (leave blank to test independent)
