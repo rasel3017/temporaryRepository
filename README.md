@@ -1,9 +1,21 @@
-Title: Kakrail Mosque Mahfil
-Topic: Importance of Salah
-Speaker: Maulana Habibur Rahman
-Date: 2026-08-15
-Time: 07:00 PM
-Location: Kakrail Mosque, Dhaka
-Description: Free entry. Refreshments will be served.
-Image URL: images/event3.jpg
-Mosque ID: (leave blank)
+export const getAllEvents = async (req, res) => {
+  try {
+    const events = await prisma.event.findMany({
+      orderBy: { eventDate: "asc" },
+      include: {
+        mosque: { select: { name: true, region: true } }
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      count: events.length,
+      data: events,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
