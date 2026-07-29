@@ -1,21 +1,12 @@
-export const getAllEvents = async (req, res) => {
-  try {
-    const events = await prisma.event.findMany({
-      orderBy: { eventDate: "asc" },
-      include: {
-        mosque: { select: { name: true, region: true } }
-      }
-    });
+async function loadAllEvents() {
+  const div = document.getElementById("eventResults");
+  div.innerHTML = "<p>Loading events...</p>";
 
-    res.status(200).json({
-      success: true,
-      count: events.length,
-      data: events,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  try {
+    const res = await fetch(`${API}/events`);
+    const data = await res.json();
+    displayEvents(data.data, div);
+  } catch (err) {
+    div.innerHTML = "<p>Could not load events.</p>";
   }
-};
+}
