@@ -1,1 +1,1 @@
-https://your-render-url.onrender.com/api/auth/seed-now
+https://smart-mosque-management.onrender.com/api/auth/seed-now
