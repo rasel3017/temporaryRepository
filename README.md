@@ -1,13 +1,8 @@
-async function showEventDetails(eventId) {
-  showSection("events");
-  const div = document.getElementById("eventResults");
-  div.innerHTML = "<p>Loading...</p>";
-
+export const getAllMosques = async (req, res) => {
   try {
-    const res = await fetch(`${API}/events/${eventId}`);
-    const data = await res.json();
-    displayEvents([data.data], div);
-  } catch (err) {
-    div.innerHTML = "<p>Could not load event.</p>";
+    const mosques = await prisma.mosque.findMany();
+    res.status(200).json({ success: true, count: mosques.length, data: mosques });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
