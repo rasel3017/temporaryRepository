@@ -1,15 +1,16 @@
 SELECT *
 FROM student
-WHERE points <> 5;
-SELECT *
-FROM product
-WHERE price BETWEEN 2000 AND 15000;
-SELECT *
+WHERE department = 'CSE'
+   OR department = 'BBA';
+
+   SELECT *
 FROM student
-WHERE first_name LIKE '%hi%';
-SELECT *
+WHERE department = 'CSE'
+   OR department = 'EEE'
+   AND points > 80;
+
+   SELECT *
 FROM student
-WHERE first_name LIKE '%r';
-SELECT *
-FROM product
-WHERE quantity IS NULL;
+WHERE (department = 'CSE'
+    OR department = 'EEE')
+  AND points > 80;
