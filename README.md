@@ -1,30 +1,13 @@
-export const deleteMaktab = async (req, res) => {
-  try {
-    const { maktabId } = req.params;
-
-    const maktab = await prisma.maktab.findUnique({
-      where: { id: maktabId },
-    });
-
-    if (!maktab) {
-      return res.status(404).json({
-        success: false,
-        message: "Maktab not found",
-      });
-    }
-
-    await prisma.student.deleteMany({ where: { maktabId } });
-    await prisma.funding.deleteMany({ where: { maktabId } });
-    await prisma.maktab.delete({ where: { id: maktabId } });
-
-    res.status(200).json({
-      success: true,
-      message: "Maktab deleted successfully",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+div.innerHTML = data.data.slice(0, 3).map(e => `
+  <div class="event-announcement-card" onclick="showEventDetails('${e.id}')" style="cursor:pointer;">
+    ${e.imageUrl ? `<img src="${e.imageUrl}" alt="${e.title}">` : `<div class="no-image">📅</div>`}
+    <div class="event-announcement-body">
+      <h3>${e.title}</h3>
+      <p>🎤 ${e.speaker}</p>
+      <p>📅 ${new Date(e.eventDate).toLocaleDateString('en-BD')}</p>
+      <p>⏰ ${e.eventTime}</p>
+      ${e.location ? `<p>📍 ${e.location}</p>` : ""}
+      <span class="card-badge ${e.isFree ? 'free' : 'paid'}">${e.isFree ? "Free Entry" : "Paid"}</span>
+    </div>
+  </div>
+`).join("");
