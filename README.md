@@ -84,3 +84,31 @@ smart-mosque-management/
 │   ├── schema.prisma → Database models
 │   └── seed.js       → Sample data
 └── package.json
+📄 Some API Endpoints
+Module
+Method
+Endpoint
+Auth
+POST
+/api/auth/register
+Auth
+POST
+/api/auth/login
+Mosque
+GET
+/api/mosques/all
+Mosque
+GET
+/api/mosques/region/:region
+Maktab
+GET
+/api/maktabs
+Events
+GET
+/api/events
+Q&A
+GET
+/api/qa/questions
+Prayer
+External
+Aladhan API
