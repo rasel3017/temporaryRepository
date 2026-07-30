@@ -1,7 +1,8 @@
-SELECT CONCAT(first_name, ' ', last_name) AS Full_Name
+SELECT DISTINCT department
 FROM student;
-SELECT CONCAT(first_name, ' ', last_name,
-              ' got ', points,
-              ' points, thank you') AS Message
-FROM student
-WHERE first_name = 'Osman';
+SELECT product_id, product_name, price
+FROM product
+WHERE price > 1000;
+SELECT product_name, price
+FROM product
+WHERE price * quantity > 10000;
