@@ -1,8 +1,12 @@
-SELECT *
-FROM employee
-WHERE first_name LIKE 'R%';
-SELECT *
-FROM employee
-WHERE last_name LIKE '%n';
-SELECT RPAD(first_name, 12, '*') AS Padded_Name
+SELECT salary,
+       ROUND(salary / 3, 2) AS Divided_Salary
+FROM employee;
+SELECT salary,
+       MOD(salary, 5000) AS Remainder
+FROM employee;
+SELECT salary,
+       ABS(salary - 40000) AS Absolute_Difference
+FROM employee;
+SELECT salary,
+       POWER(salary, 2) AS Salary_Square
 FROM employee;
